@@ -25,9 +25,9 @@ const GLuint WIDTH = 800, HEIGHT = 600;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
 
 // Function prototypes
-void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mode );
-void MouseCallback( GLFWwindow *window, double xPos, double yPos );
-void DoMovement( );
+//void KeyCallback( GLFWwindow *window, int key, int scancode, int action, int mode );
+//void MouseCallback( GLFWwindow *window, double xPos, double yPos );
+//void DoMovement( );
 
 // Camera
 Camera camera( glm::vec3(-3.5f, 1.0f, 4.0f ), glm::vec3(0.0f, 1.0f, 0.0f), -45, 0);
@@ -65,8 +65,8 @@ int main( )
     glfwGetFramebufferSize( window, &SCREEN_WIDTH, &SCREEN_HEIGHT );
     
     // Set the required callback functions
-    glfwSetKeyCallback( window, KeyCallback );
-    glfwSetCursorPosCallback( window, MouseCallback );
+    //glfwSetKeyCallback( window, KeyCallback );
+    //glfwSetCursorPosCallback( window, MouseCallback );
     
     // GLFW Options
     glfwSetInputMode( window, GLFW_CURSOR, GLFW_CURSOR_DISABLED );
@@ -90,7 +90,10 @@ int main( )
     Shader shader( "res/shaders/modelLoading.vs", "res/shaders/modelLoading.frag" );
     
     // Load models
-    Model ourModel( "res/models/character_walkingupstairs/character1.0001.obj" );
+	Model Cube1Model("res/models/Cube1.obj");
+	Model Cube2Model("res/models/Cube2.obj");
+	Model Sphere1Model("res/models/Sphere.obj");
+    //Model CharacterModel( "res/models/character_pickup/character1.0030.obj" );
     
     // Draw in wireframe
     //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -129,9 +132,39 @@ int main( )
 		"res/models/character_walkingupstairs/character1.0028.obj",
 		"res/models/character_walkingupstairs/character1.0029.obj",
 		"res/models/character_walkingupstairs/character1.0030.obj",
-	};
 
-	int currentFrame = 0;
+		"res/models/character_pickup/character1.0001.obj",
+		"res/models/character_pickup/character1.0002.obj",
+		"res/models/character_pickup/character1.0003.obj",
+		"res/models/character_pickup/character1.0004.obj",
+		"res/models/character_pickup/character1.0005.obj",
+		"res/models/character_pickup/character1.0006.obj",
+		"res/models/character_pickup/character1.0007.obj",
+		"res/models/character_pickup/character1.0008.obj",
+		"res/models/character_pickup/character1.0009.obj",
+		"res/models/character_pickup/character1.0010.obj",
+		"res/models/character_pickup/character1.0011.obj",
+		"res/models/character_pickup/character1.0012.obj",
+		"res/models/character_pickup/character1.0013.obj",
+		"res/models/character_pickup/character1.0014.obj",
+		"res/models/character_pickup/character1.0015.obj",
+		"res/models/character_pickup/character1.0016.obj",
+		"res/models/character_pickup/character1.0017.obj",
+		"res/models/character_pickup/character1.0018.obj",
+		"res/models/character_pickup/character1.0019.obj",
+		"res/models/character_pickup/character1.0020.obj",
+		"res/models/character_pickup/character1.0021.obj",
+		"res/models/character_pickup/character1.0022.obj",
+		"res/models/character_pickup/character1.0023.obj",
+		"res/models/character_pickup/character1.0024.obj",
+		"res/models/character_pickup/character1.0025.obj",
+		"res/models/character_pickup/character1.0026.obj",
+		"res/models/character_pickup/character1.0027.obj",
+		"res/models/character_pickup/character1.0028.obj",
+		"res/models/character_pickup/character1.0029.obj",
+		"res/models/character_pickup/character1.0030.obj",
+	};
+	int currentCharacterFrame = 0;
 
     //	Display loop
     while( !glfwWindowShouldClose( window ) )
@@ -143,7 +176,7 @@ int main( )
         
         // Check and call events
         glfwPollEvents( );
-        DoMovement( );
+        //DoMovement( );
         
         // Clear the colorbuffer
         glClearColor( 0.05f, 0.05f, 0.05f, 1.0f );
@@ -155,13 +188,43 @@ int main( )
         glUniformMatrix4fv( glGetUniformLocation( shader.Program, "projection" ), 1, GL_FALSE, glm::value_ptr( projection ) );
         glUniformMatrix4fv( glGetUniformLocation( shader.Program, "view" ), 1, GL_FALSE, glm::value_ptr( view ) );
         
-        // Draw the loaded model
-        glm::mat4 model;
+		// Draw the first cube
+		glm::mat4 cube1;
+		cube1 = glm::translate(cube1, glm::vec3(-0.1f, 0.11f, 0.3f)); // Translate
+		cube1 = glm::scale(cube1, glm::vec3(0.15f, 0.15f, 0.15f));	// It's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(cube1));
+		Cube1Model.Draw(shader);
+
+		// Draw the second cube
+		glm::mat4 cube2;
+		cube2 = glm::translate(cube2, glm::vec3(0.1f, -0.13f, 0.2f)); // Translate
+		cube2 = glm::scale(cube2, glm::vec3(0.15f, 0.15f, 0.15f));	// It's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(cube2));
+		Cube2Model.Draw(shader);
+
+		// Draw the sphere
+		glm::mat4 sphere1;
+		sphere1 = glm::translate(sphere1, glm::vec3(0.25f, 1.8f, 0.3f)); // Translate
+		sphere1 = glm::scale(sphere1, glm::vec3(0.15f, 0.15f, 0.15f));	// It's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(sphere1));
+		Sphere1Model.Draw(shader);
+
+        // Draw the character model frame by frame
+		Model CharacterModel(characterFrames[currentCharacterFrame]);
+		glm::mat4 model;
         model = glm::translate( model, glm::vec3( 0.0f, 0.0f, 0.0f ) ); // Translate it down a bit so it's at the center of the scene
         model = glm::scale( model, glm::vec3( 0.01f, 0.01f, 0.01f ) );	// It's a bit too big for our scene, so scale it down
         glUniformMatrix4fv( glGetUniformLocation( shader.Program, "model" ), 1, GL_FALSE, glm::value_ptr( model ) );
-        ourModel.Draw( shader );
-        
+        CharacterModel.Draw( shader );
+
+		//	Update character frame
+		cout << "Loading current file: " << characterFrames[currentCharacterFrame] << endl;
+		cout << "Current frame: " << currentCharacterFrame << endl;
+		if (currentCharacterFrame >= (sizeof(characterFrames) / sizeof(characterFrames[0])) - 1)
+			currentCharacterFrame = 0;
+		else
+			currentCharacterFrame++;
+
         // Swap the buffers
         glfwSwapBuffers( window );
     }
@@ -171,6 +234,7 @@ int main( )
 }
 
 // Moves/alters the camera positions based on user input
+/*
 void DoMovement( )
 {
     // Camera controls
@@ -232,5 +296,5 @@ void MouseCallback( GLFWwindow *window, double xPos, double yPos )
     lastY = yPos;
     
     camera.ProcessMouseMovement( xOffset, yOffset );
-}
+}*/
 
