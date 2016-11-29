@@ -29,7 +29,7 @@ int SCREEN_WIDTH, SCREEN_HEIGHT;
 //void MouseCallback( GLFWwindow *window, double xPos, double yPos );
 //void DoMovement( );
 
-// Camera
+// Camera - (Position, Front, Yaw, Pitch)
 Camera camera( glm::vec3(-3.5f, 1.0f, 4.0f ), glm::vec3(0.0f, 1.0f, 0.0f), -45, 0);
 bool keys[1024];
 GLfloat lastX = 400, lastY = 300;
@@ -89,7 +89,7 @@ int main( )
     // Setup and compile our shaders
     Shader shader( "res/shaders/modelLoading.vs", "res/shaders/modelLoading.frag" );
     
-    // Load models
+    // Load base models
 	Model Cube1Model("res/models/Cube1.obj");
 	Model Cube2Model("res/models/Cube2.obj");
 	Model Sphere1Model("res/models/Sphere.obj");
@@ -100,6 +100,8 @@ int main( )
     
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
 
+	//	Cache character frames so its easier to access later
+	int currentCharacterFrame = 0;
 	string characterFrames[] =
 	{
 		"res/models/character_walkingupstairs/character1.0001.obj",
@@ -164,7 +166,6 @@ int main( )
 		"res/models/character_pickup/character1.0029.obj",
 		"res/models/character_pickup/character1.0030.obj",
 	};
-	int currentCharacterFrame = 0;
 
     //	Display loop
     while( !glfwWindowShouldClose( window ) )
@@ -190,21 +191,21 @@ int main( )
         
 		// Draw the first cube
 		glm::mat4 cube1;
-		cube1 = glm::translate(cube1, glm::vec3(-0.1f, 0.11f, 0.3f)); // Translate
+		cube1 = glm::translate(cube1, glm::vec3(-0.1f, 0.08f, 0.3f)); // Translate
 		cube1 = glm::scale(cube1, glm::vec3(0.15f, 0.15f, 0.15f));	// It's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(cube1));
 		Cube1Model.Draw(shader);
 
 		// Draw the second cube
 		glm::mat4 cube2;
-		cube2 = glm::translate(cube2, glm::vec3(0.1f, -0.13f, 0.2f)); // Translate
+		cube2 = glm::translate(cube2, glm::vec3(0.1f, 0.30f, 0.8f)); // Translate
 		cube2 = glm::scale(cube2, glm::vec3(0.15f, 0.15f, 0.15f));	// It's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(cube2));
 		Cube2Model.Draw(shader);
 
 		// Draw the sphere
 		glm::mat4 sphere1;
-		sphere1 = glm::translate(sphere1, glm::vec3(0.25f, 1.8f, 0.3f)); // Translate
+		sphere1 = glm::translate(sphere1, glm::vec3(0.25f, 1.8f, 0.75f)); // Translate
 		sphere1 = glm::scale(sphere1, glm::vec3(0.15f, 0.15f, 0.15f));	// It's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(sphere1));
 		Sphere1Model.Draw(shader);
