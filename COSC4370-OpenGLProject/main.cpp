@@ -102,7 +102,8 @@ int main( )
     
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
 
-	#pragma region	Cache character models so its easier to acces from our frame array
+	//	Cache character models so its easier to acces from our frame array
+	#pragma region	character model frames
 	cout << "Loading character model frame 1 of 60..." << endl;
 	Model CharacterModelFrame1("res/models/character_walkingupstairs/character1.0001.obj");
 	cout << "Loading character model frame 2 of 60..." << endl;
@@ -227,6 +228,7 @@ int main( )
 
 	//	Add the models to our frame array
 	int currentCharacterFrame = 0;
+	#pragma region	character model frames array
 	vector<Model> characterModelFrames;
 	characterModelFrames.push_back(CharacterModelFrame1);
 	characterModelFrames.push_back(CharacterModelFrame2);
@@ -286,6 +288,7 @@ int main( )
 	characterModelFrames.push_back(CharacterModelFrame58);
 	characterModelFrames.push_back(CharacterModelFrame59);
 	characterModelFrames.push_back(CharacterModelFrame60);
+	#pragma endregion
 
     //	Display loop
     while( !glfwWindowShouldClose( window ) )
